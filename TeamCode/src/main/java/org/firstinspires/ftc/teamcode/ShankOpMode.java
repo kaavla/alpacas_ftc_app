@@ -50,8 +50,8 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-@Disabled
+@TeleOp(name="ShankOpMode Test", group="Linear Opmode")
+//@Disabled
 public class ShankOpMode extends LinearOpMode {
 
     // Declare OpMode members.

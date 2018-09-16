@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Gamepad2test Linear OpMode", group="Linear Opmode")
+@TeleOp(name="Gamepad2", group="Linear Opmode")
 //@Disabled
 public class Gamepad extends LinearOpMode {
 
@@ -21,6 +21,7 @@ public class Gamepad extends LinearOpMode {
 
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
+
 
     @Override
     public void runOpMode() {

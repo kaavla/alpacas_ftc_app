@@ -21,14 +21,18 @@ public class Gamepad extends LinearOpMode {
 
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
+    private DcMotor backrightMotor = null;
+    private DcMotor backleftMotor = null;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        leftMotor  = hardwareMap.get(DcMotor.class, "MotorOne");
-        rightMotor = hardwareMap.get(DcMotor.class, "MotorTwo");
+        leftMotor  = hardwareMap.get(DcMotor.class, "MFrontLeft");
+        rightMotor = hardwareMap.get(DcMotor.class, "MFrontRight");
+        backleftMotor  = hardwareMap.get(DcMotor.class, "MBackLeft");
+        backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
 
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -57,12 +61,16 @@ public class Gamepad extends LinearOpMode {
             {
                 leftMotor.setPower(0.5);
                 rightMotor.setPower(0.5);
+                backleftMotor.setPower(0.5);
+                backrightMotor.setPower(0.5);
             }
             else if (gamepad1.dpad_down
                     )
             {
                 leftMotor.setPower(-0.5);
                 rightMotor.setPower(-0.5);
+                backleftMotor.setPower(-0.5);
+                backrightMotor.setPower(0.5);
             }
             else if (gamepad1.dpad_right
                     /*Left forward and Right backward*/
@@ -70,6 +78,8 @@ public class Gamepad extends LinearOpMode {
             {
                 leftMotor.setPower(0.5);
                 rightMotor.setPower(-0.5);
+                backleftMotor.setPower(0.5);
+                backrightMotor.setPower(-0.5);
             }
             else if (gamepad1.dpad_left
                     /*Left backward and Right forward*/
@@ -77,11 +87,15 @@ public class Gamepad extends LinearOpMode {
             {
                 leftMotor.setPower(-0.5);
                 rightMotor.setPower(0.5);
+                backleftMotor.setPower(-0.5);
+                backrightMotor.setPower(0.5);
             }
             else
             {
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
+                backleftMotor.setPower(0);
+                backrightMotor.setPower(0);
             }
 
             //leftMotor.setPower(-gamepad1.left_stick_y);

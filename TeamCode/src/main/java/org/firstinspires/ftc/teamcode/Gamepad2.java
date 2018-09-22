@@ -12,25 +12,31 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Gamepad2test Linear OpMode", group="Linear Opmode")
 //@Disabled
-public class Gamepad extends LinearOpMode {
+public class Gamepad2test.java extends LinearOpMode {
 
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    //  private DcMotor leftDrive = null;
-    // private DcMotor rightDrive = null;
+// Declare OpMode members.
+private ElapsedTime runtime = new ElapsedTime();
+//  private DcMotor leftDrive = null;
+// private DcMotor rightDrive = null;
 
-    private DcMotor leftMotor = null;
-    private DcMotor rightMotor = null;
+private DcMotor leftMotor = null;
+private DcMotor rightMotor = null;
+private DcMotor backrightMotor = null;
+private DcMotor backleftMotor = null;
 
-    @Override
-    public void runOpMode() {
+@Override
+public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         leftMotor  = hardwareMap.get(DcMotor.class, "MotorOne");
         rightMotor = hardwareMap.get(DcMotor.class, "MotorTwo");
+        backleftMotor  = hardwareMap.get(DcMotor.class, "MotorThree");
+        backrightMotor  = hardwareMap.get(DcMotor.class, "MotorFour");
 
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backleftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -50,56 +56,58 @@ public class Gamepad extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.update();
 
 
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.update();
 
-            if (gamepad1.a
-                    )
-            {
-                leftMotor.setPower(1);
-                rightMotor.setPower(1);
-                //left back motor power -1
-                //right back motor power -1
-            }
-            else if (gamepad1.b)
-            {
-                leftMotor.setPower(-1);
-                rightMotor.setPower(-1);
-                //left back motor power 1
-                //right back motor power 1
-            }
-            else if (gamepad1.left_bumper)
-            {
-                leftMotor.setPower(1);
-                //right back motor power 1
-            }
-            else if (gamepad1.left_trigger)
-            {
-                leftMotor.setPower(-1);
-                //right back motor power -1
-            }
-            else if (gamepad1.right_bumper)
-            {
-                rightMotor.setPower(1);
-                //left back motor power 1
-            }
-            else if (gamepad1.right_trigger)
-            {
-                rightMotor.setPower(-1);
-                //left back motor power -   1
-            }
-            else
-            {
-                leftMotor.setPower(-gamepad1.left_stick_y);
-                //left back motor
-                rightMotor.setPower(-gamepad1.right_stick_y);
-                //right back motor
-            }
+        if (gamepad1.a
+        )
+        {
+        leftMotor.setPower(1);
+        rightMotor.setPower(1);
+        backleftMotor.setPower(1);
+        backrightMotor.setPower(1);
+        }
+        else if (gamepad1.b)
+        {
+        leftMotor.setPower(-1);
+        rightMotor.setPower(-1);
+        backleftMotor.setPower(1);
+        backrightMotor.setPower(1);
+        }
+        else if (gamepad1.left_bumper)
+        {
+        leftMotor.setPower(1);
+        backrightMotor.setPower(1);
+        }
+        else if (gamepad1.left_trigger)
+        {
+        leftMotor.setPower(-1);
+        backrightMotor.setPower(-1);
+        }
+        else if (gamepad1.right_bumper)
+        {
+        rightMotor.setPower(1);
+        backleftMotor.setPower(1);
+        }
+        else if (gamepad1.right_trigger)
+        {
+        rightMotor.setPower(-1);
+        backleftMotor.setPower(-1);
+        }
+        else
+        {
+        leftMotor.setPower(-gamepad1.left_stick_y);
+        backleftMotor.setPower(-gamepad1.right_stick_y);
+        rightMotor.setPower(-gamepad1.right_stick_y);
+        backrightMotor.setPower(-gamepad1.right_stick_y);
+        }
+
+
 
 
 
@@ -140,5 +148,5 @@ public class Gamepad extends LinearOpMode {
             telemetry.update();
             */
         }
-    }
-}
+        }
+        }

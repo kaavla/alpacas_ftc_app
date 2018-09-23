@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="Gamepad Linear OpMode", group="Linear Opmode")
+@TeleOp(name="M_A_Gamepad Linear OpMode", group="Linear Opmode")
 //@Disabled
-public class Gamepad extends LinearOpMode {
+public class AlphaGamepad extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -107,14 +107,14 @@ public class Gamepad extends LinearOpMode {
                 backleftMotor.setPower(-1);
                 backrightMotor.setPower(1);
             }
-            else if (gamepad1.left_bumper
+            else if (gamepad1.left_stick_button
                     )
             {
                 leftMotor.setPower(0.5);
                 backrightMotor.setPower(0.5);
                 //left diagonal forward
             }
-            else if (gamepad1.left_stick_button)
+            else if (gamepad1.left_bumper)
             {
                 leftMotor.setPower(-0.5);
                 backrightMotor.setPower(-0.5);

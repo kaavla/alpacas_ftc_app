@@ -34,8 +34,8 @@ public class AlphaGamepad extends LinearOpMode {
         backleftMotor  = hardwareMap.get(DcMotor.class, "MBackLeft");
         backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
 
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backleftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -91,43 +91,52 @@ public class AlphaGamepad extends LinearOpMode {
                 backleftMotor.setPower(0.5);
                 backrightMotor.setPower(-0.5);
             }
-            else if (gamepad1.a
-                    )
-            {
-                leftMotor.setPower(-1);
-                rightMotor.setPower(1);
-                backleftMotor.setPower(1);
-                backrightMotor.setPower(-1);
-            }
             else if (gamepad1.b
                     )
             {
-                leftMotor.setPower(1);
-                rightMotor.setPower(-1);
-                backleftMotor.setPower(-1);
-                backrightMotor.setPower(1);
+                leftMotor.setPower(-0.75);
+                rightMotor.setPower(0.75);
+                backleftMotor.setPower(0.75);
+                backrightMotor.setPower(-0.75);
             }
-            else if (gamepad1.left_stick_button
+            else if (gamepad1.x
                     )
             {
-                leftMotor.setPower(0.5);
-                backrightMotor.setPower(0.5);
-                //left diagonal forward
+                leftMotor.setPower(0.75);
+                rightMotor.setPower(-0.75);
+                backleftMotor.setPower(-0.75);
+                backrightMotor.setPower(0.75);
+            }
+            else if (gamepad1.right_bumper
+                    )
+            {
+                rightMotor.setPower(0.6);
+                backleftMotor.setPower(0.6);
+                //right diagonal forward
+            }
+            else if (gamepad1.left_stick_button)
+            {
+                rightMotor.setPower(-0.6);
+                backleftMotor.setPower(-0.6);
+                //backwards diagonal left
             }
             else if (gamepad1.left_bumper)
             {
-                leftMotor.setPower(-0.5);
-                backrightMotor.setPower(-0.5);
-            }
-            else if (gamepad1.right_bumper)
-            {
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(0.5);
+                leftMotor.setPower(0.6);
+                backrightMotor.setPower(0.6);
+            //forward diagonal left
             }
             else if (gamepad1.right_stick_button)
             {
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(-0.5);
+                leftMotor.setPower(-0.6);
+                backrightMotor.setPower(-0.6);
+            }
+            else if (gamepad1.a)
+            {
+                leftMotor.setPower(-1);
+                rightMotor.setPower(-1);
+                backleftMotor.setPower(-1);
+                backrightMotor.setPower(-1);
             }
             else
             {

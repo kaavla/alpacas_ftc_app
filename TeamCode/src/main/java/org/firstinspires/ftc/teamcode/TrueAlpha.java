@@ -57,69 +57,69 @@ public class TrueAlpha extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 
-            if (gamepad1.b)
-            {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(0);
-                backleftMotor.setPower(0);
-                backrightMotor.setPower(0.5);
-            }
-
-            if (gamepad1.y)
-            {
-                leftMotor.setPower(0);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(0);
-            }
-
-            if (gamepad1.a)
-            {
-                leftMotor.setPower(0);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(0);
-            }
-
-            if (gamepad1.x)
-            {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(0);
-                backleftMotor.setPower(0);
-                backrightMotor.setPower(-0.5);
-            }
-
             if (gamepad1.right_bumper)
             {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(0.5);
-
+                leftMotor.setPower(-0.75);
+                rightMotor.setPower(0);
+                backleftMotor.setPower(0);
+                backrightMotor.setPower(0.75);
             }
 
             if (gamepad1.left_bumper)
             {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(-0.5);
+                leftMotor.setPower(0);
+                rightMotor.setPower(0.75);
+                backleftMotor.setPower(-0.75);
+                backrightMotor.setPower(0);
+            }
+
+            if (gamepad1.right_stick_button)
+            {
+                leftMotor.setPower(0);
+                rightMotor.setPower(-0.75);
+                backleftMotor.setPower(0.75);
+                backrightMotor.setPower(0);
+            }
+
+            if (gamepad1.left_stick_button)
+            {
+                leftMotor.setPower(0.75);
+                rightMotor.setPower(0);
+                backleftMotor.setPower(0);
+                backrightMotor.setPower(-0.75);
+            }
+
+            if (gamepad1.b)
+            {
+                leftMotor.setPower(-0.75);
+                rightMotor.setPower(-0.75);
+                backleftMotor.setPower(0.75);
+                backrightMotor.setPower(0.75);
+
+            }
+
+            if (gamepad1.x)
+            {
+                leftMotor.setPower(0.75);
+                rightMotor.setPower(0.75);
+                backleftMotor.setPower(-0.75);
+                backrightMotor.setPower(-0.75);
             }
 
             if (gamepad1.dpad_up)
             {
-                leftMotor.setPower(-1);
-                rightMotor.setPower(1);
-                backleftMotor.setPower(-1);
-                backrightMotor.setPower(1);
+                leftMotor.setPower(-0.5);
+                rightMotor.setPower(0.5);
+                backleftMotor.setPower(-0.5);
+                backrightMotor.setPower(0.5);
             }
             else if (gamepad1.dpad_down
                     )
             {
-                leftMotor.setPower(1);
-                rightMotor.setPower(-1);
-                backleftMotor.setPower(1);
-                backrightMotor.setPower(-1);
+                leftMotor.setPower(0.5);
+                rightMotor.setPower(-0.5);
+                backleftMotor.setPower(0.5);
+                backrightMotor.setPower(-0.5);
             }
             else if (gamepad1.dpad_right
                     /*Left forward and Right backward*/

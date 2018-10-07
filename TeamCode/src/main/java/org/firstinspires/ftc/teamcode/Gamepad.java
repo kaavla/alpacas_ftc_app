@@ -33,8 +33,10 @@ public class Gamepad extends LinearOpMode {
         rightMotor = hardwareMap.get(DcMotor.class, "MFrontRight");
         backleftMotor  = hardwareMap.get(DcMotor.class, "MBackLeft");
         backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
+        double more_power = 0.3;
 
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -59,36 +61,48 @@ public class Gamepad extends LinearOpMode {
 
             if (gamepad1.dpad_up)
             {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(0.5);
+                leftMotor.setPower(more_power);
+                rightMotor.setPower(more_power);
+                backleftMotor.setPower(more_power);
+                backrightMotor.setPower(more_power);
             }
             else if (gamepad1.dpad_down
                     )
             {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(0.5);
+                leftMotor.setPower(-1*more_power);
+                rightMotor.setPower(-1*more_power);
+                backleftMotor.setPower(-1*more_power);
+                backrightMotor.setPower(-1*more_power);
             }
             else if (gamepad1.dpad_right
                     /*Left forward and Right backward*/
                     )
             {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(-0.5);
+                leftMotor.setPower(-1*more_power);
+                rightMotor.setPower(more_power);
+                backleftMotor.setPower(-1*more_power);
+                backrightMotor.setPower(more_power);
             }
             else if (gamepad1.dpad_left
                     /*Left backward and Right forward*/
                     )
             {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(0.5);
+                leftMotor.setPower(more_power);
+                rightMotor.setPower(-1*more_power);
+                backleftMotor.setPower(more_power);
+                backrightMotor.setPower(-1*more_power);
+            }
+            else if (gamepad1.y)
+            {
+                if (more_power <= 1) {
+                    more_power = more_power + 0.1;
+                }
+            }
+            else if (gamepad1.a)
+            {
+                if (more_power <= 0){
+
+                }
             }
             else
             {
@@ -102,7 +116,7 @@ public class Gamepad extends LinearOpMode {
             //rightMotor.setPower(-gamepad1.right_stick_y);
 
 
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("ShankStatus", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
 

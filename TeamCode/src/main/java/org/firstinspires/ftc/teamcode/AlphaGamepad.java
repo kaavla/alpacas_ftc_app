@@ -26,29 +26,21 @@ public class AlphaGamepad extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        double motor_power = 0.5;
+        int count = 0;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        leftMotor  = hardwareMap.get(DcMotor.class, "MFrontLeft");
-        rightMotor = hardwareMap.get(DcMotor.class, "MFrontRight");
-        backleftMotor  = hardwareMap.get(DcMotor.class, "MBackLeft");
+        //Initialize motor variables
+        leftMotor       = hardwareMap.get(DcMotor.class, "MFrontLeft");
+        rightMotor      = hardwareMap.get(DcMotor.class, "MFrontRight");
+        backleftMotor   = hardwareMap.get(DcMotor.class, "MBackLeft");
         backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
 
+        //Set default reverse for right motors to account for inverse motors
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backleftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        /* Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        // Wait for the game to start (driver presses PLAY)*/
 
         waitForStart();
         runtime.reset();
@@ -56,87 +48,95 @@ public class AlphaGamepad extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
             telemetry.update();
 
             if (gamepad1.dpad_up)
             {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(-0.5);
+                //Go Forward
+                leftMotor.setPower(motor_power);
+                rightMotor.setPower(motor_power);
+                backleftMotor.setPower(motor_power);
+                backrightMotor.setPower(motor_power);
             }
-            else if (gamepad1.dpad_down
-                    )
+            else if (gamepad1.dpad_down)
             {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(0.5);
+                //Go Backward
+                leftMotor.setPower(-1*motor_power);
+                rightMotor.setPower(-1*motor_power);
+                backleftMotor.setPower(-1*motor_power);
+                backrightMotor.setPower(-1*motor_power);
             }
-            else if (gamepad1.dpad_right
-                    /*Left forward and Right backward*/
-                    )
+            else if (gamepad1.dpad_right)
             {
-                leftMotor.setPower(-0.5);
-                rightMotor.setPower(0.5);
-                backleftMotor.setPower(-0.5);
-                backrightMotor.setPower(0.5);
+                //Rotate Right on Axis
+                leftMotor.setPower(motor_power);
+                rightMotor.setPower(-1*motor_power);
+                backleftMotor.setPower(motor_power);
+                backrightMotor.setPower(-1*motor_power);
             }
-            else if (gamepad1.dpad_left
-                    /*Left backward and Right forward*/
-                    )
+            else if (gamepad1.dpad_left)
             {
-                leftMotor.setPower(0.5);
-                rightMotor.setPower(-0.5);
-                backleftMotor.setPower(0.5);
-                backrightMotor.setPower(-0.5);
+                //Rotate Left on axis
+                leftMotor.setPower(-1*motor_power);
+                rightMotor.setPower(motor_power);
+                backleftMotor.setPower(-1*motor_power);
+                backrightMotor.setPower(motor_power);
             }
-            else if (gamepad1.b
-                    )
+            else if (gamepad1.b)
             {
-                leftMotor.setPower(-0.75);
-                rightMotor.setPower(0.75);
-                backleftMotor.setPower(0.75);
-                backrightMotor.setPower(-0.75);
+                //Strafe Right
+                leftMotor.setPower(motor_power);
+                rightMotor.setPower(-1*motor_power);
+                backleftMotor.setPower(-1*motor_power);
+                backrightMotor.setPower(motor_power);
             }
-            else if (gamepad1.x
-                    )
+            else if (gamepad1.x)
             {
-                leftMotor.setPower(0.75);
-                rightMotor.setPower(-0.75);
-                backleftMotor.setPower(-0.75);
-                backrightMotor.setPower(0.75);
+                //Strafe Left
+                leftMotor.setPower(-1*motor_power);
+                rightMotor.setPower(motor_power);
+                backleftMotor.setPower(motor_power);
+                backrightMotor.setPower(-1*motor_power);
             }
-            else if (gamepad1.right_bumper
-                    )
+            else if (gamepad1.right_bumper)
             {
-                rightMotor.setPower(0.6);
-                backleftMotor.setPower(0.6);
                 //right diagonal forward
-            }
-            else if (gamepad1.left_stick_button)
-            {
-                rightMotor.setPower(-0.6);
-                backleftMotor.setPower(-0.6);
-                //backwards diagonal left
+                leftMotor.setPower(motor_power);
+                backrightMotor.setPower(motor_power);
             }
             else if (gamepad1.left_bumper)
             {
-                leftMotor.setPower(0.6);
-                backrightMotor.setPower(0.6);
-            //forward diagonal left
+                //forward diagonal left
+                rightMotor.setPower(motor_power);
+                backleftMotor.setPower(motor_power);
             }
             else if (gamepad1.right_stick_button)
             {
-                leftMotor.setPower(-0.6);
-                backrightMotor.setPower(-0.6);
+                //right diagonal backward
+                rightMotor.setPower(-1*motor_power);
+                backleftMotor.setPower(-1*motor_power);
+            }
+            else if (gamepad1.left_stick_button)
+            {
+                //left diagonal backward
+                leftMotor.setPower(-1*motor_power);
+                backrightMotor.setPower(-1*motor_power);
             }
             else if (gamepad1.a)
             {
-                leftMotor.setPower(-1);
-                rightMotor.setPower(-1);
-                backleftMotor.setPower(-1);
-                backrightMotor.setPower(-1);
+                count++;
+                //Increase Power
+                if (motor_power < 1.0) {
+                    motor_power = motor_power + 0.1;
+                }
+            }
+            else if (gamepad1.y)
+            {
+                //Reduce Power
+                if (motor_power > 0.2) {
+                    motor_power = motor_power - 0.1;
+                }
             }
             else
             {
@@ -146,50 +146,9 @@ public class AlphaGamepad extends LinearOpMode {
                 backrightMotor.setPower(0);
             }
 
-
-
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
             telemetry.update();
-
-
-
-
-
-
-
-
-
-            /*
-
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
-
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
-
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
-
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
-            */
         }
     }
 }

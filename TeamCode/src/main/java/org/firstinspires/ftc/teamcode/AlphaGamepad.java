@@ -23,6 +23,8 @@ public class AlphaGamepad extends LinearOpMode {
     private DcMotor rightMotor = null;
     private DcMotor backrightMotor = null;
     private DcMotor backleftMotor = null;
+    private DcMotor tempMotor = null;
+
 
     @Override
     public void runOpMode() {
@@ -37,6 +39,7 @@ public class AlphaGamepad extends LinearOpMode {
         rightMotor      = hardwareMap.get(DcMotor.class, "MFrontRight");
         backleftMotor   = hardwareMap.get(DcMotor.class, "MBackLeft");
         backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
+        tempMotor       = hardwareMap.get(DcMotor.class, "tempMotor");
 
         //Set default reverse for right motors to account for inverse motors
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -145,6 +148,19 @@ public class AlphaGamepad extends LinearOpMode {
                 backleftMotor.setPower(0);
                 backrightMotor.setPower(0);
             }
+
+
+            if (gamepad2.dpad_up)
+            {
+                tempMotor.setPower(0.2);
+            }
+            else if (gamepad2.dpad_down)
+            {
+                tempMotor.setPower(-0.2);
+            } else {
+                tempMotor.setPower(0);
+            }
+
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);

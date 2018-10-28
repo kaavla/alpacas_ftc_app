@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -57,8 +59,9 @@ public class HardwareAutonomous
     public DcMotor  rightMotor         = null;
     public DcMotor  backrightMotor     = null;
     public DcMotor  backleftMotor      = null;
+    public BNO055IMU imu;
 
-   // public static final double MID_SERVO       =  0.5 ;
+    // public static final double MID_SERVO       =  0.5 ;
    // public static final double ARM_UP_POWER    =  0.45 ;
    // public static final double ARM_DOWN_POWER  = -0.45 ;
 
@@ -81,6 +84,25 @@ public class HardwareAutonomous
         rightMotor        = hwMap.get(DcMotor.class, "MFrontRight");
         backrightMotor    = hwMap.get(DcMotor.class, "MBackRight");
         backleftMotor     = hwMap.get(DcMotor.class, "MBackLeft");
+        imu               = hwMap.get(BNO055IMU .class, "imu");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit            = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit            = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile  = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled       = true;
+        parameters.loggingTag           = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu.initialize(parameters);
+
+/*
+        while (!isStopRequested() && !imu.isGyroCalibrated())
+        {
+            sleep(50);
+            idle();
+        }
+*/
 
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         backleftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -90,6 +112,11 @@ public class HardwareAutonomous
         rightMotor.setPower(0);
         backrightMotor.setPower(0);
         backleftMotor.setPower(0);
+
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backrightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backleftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.

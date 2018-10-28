@@ -35,6 +35,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -76,9 +80,11 @@ public class AutonomousTest extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.8;
-    static final double     TURN_SPEED              = 0.4;
+    static final double     DRIVE_SPEED             = 0.5;
+    static final double     TURN_SPEED              = 0.2;
 
+    Orientation lastAngles = new Orientation();
+    double globalAngle, power = .30, correction;
     @Override
     public void runOpMode() {
 
@@ -114,11 +120,25 @@ public class AutonomousTest extends LinearOpMode {
         waitForStart();
 
         //0,2,1,3
+
+        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
+        rotate(88, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
+        rotate(88, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
+        rotate(88, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
+        rotate(88, TURN_SPEED);
+
+/*
         myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
         myEncoderDrive(2, DRIVE_SPEED, 24, -24,5.0);
         myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
         myEncoderDrive(2, DRIVE_SPEED, 24, -24,5.0);
         myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
+        myEncoderDrive(2, DRIVE_SPEED, 24, -24,5.0);
+        myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
+        */
         //robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         //robot.rightClaw.setPosition(0.0);
         sleep(1000);     // pause for servos to move
@@ -129,13 +149,19 @@ public class AutonomousTest extends LinearOpMode {
 
     public void myEncoderDrive(int direction,
                                double speed,
-                               double LeftInches,
-                               double RightInches,
+                               double Inches,
                                double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
         int newLeftBackTarget;
         int newRightBackTarget;
+
+
+        //Reset the encoder
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backrightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backleftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -144,46 +170,43 @@ public class AutonomousTest extends LinearOpMode {
             if (direction == 0)
             {
                 //Go forward
-                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-
+                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
             } else if (direction == 1)
             {
                 //Go backward
-                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-
+                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
             }
             else if (direction == 2)
             {
                 //Strafe Right
-                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
+                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
 
             }
             else if (direction == 3)
             {
                 //Strafe Left
-                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
+                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
+                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
 
             }
             else
             {
-                LeftInches = 0;
-                RightInches = 0;
-                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(RightInches * COUNTS_PER_INCH);
-                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
-                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(LeftInches * COUNTS_PER_INCH);
+                Inches = 0;
+                newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+                newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
 
             }
 
@@ -235,8 +258,98 @@ public class AutonomousTest extends LinearOpMode {
             robot.backleftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.backrightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(500);   // optional pause after each move
+            sleep(200);   // optional pause after each move
         }
     }
+    private void resetAngle()
+    {
+        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    /**
+     * Get current cumulative angle rotation from last reset.
+     * @return Angle in degrees. + = left, - = right.
+     */
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+    }
+    /**
+     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+     * @param degrees Degrees to turn, + is left - is right
+     */
+    private void rotate(int degrees, double power)
+    {
+
+        // restart imu movement tracking.
+        resetAngle();
+
+
+        if (degrees < 0)
+        {   // turn right.
+
+            robot.leftMotor.setPower(power);
+            robot.rightMotor.setPower(-1*power);
+            robot.backleftMotor.setPower(power);
+            robot.backrightMotor.setPower(-1*power);
+
+        }
+        else if (degrees > 0)
+        {   // turn left.
+
+            robot.leftMotor.setPower(-1*power);
+            robot.rightMotor.setPower(power);
+            robot.backleftMotor.setPower(-1*power);
+            robot.backrightMotor.setPower(power);
+
+        }
+        else return;
+
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (opModeIsActive() && getAngle() == 0) {}
+
+            while (opModeIsActive() && getAngle() > degrees) {}
+        }
+        else    // left turn.
+            while (opModeIsActive() && getAngle() < degrees) {}
+
+        // turn the motors off.
+        power=0;
+        robot.leftMotor.setPower(power);
+        robot.rightMotor.setPower(power);
+        robot.backleftMotor.setPower(power);
+        robot.backrightMotor.setPower(power);
+
+        // wait for rotation to stop.
+        sleep(1000);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
 
 }

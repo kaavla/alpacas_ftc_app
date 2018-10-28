@@ -4,8 +4,10 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -24,7 +26,7 @@ public class AlphaGamepad extends LinearOpMode {
     private DcMotor backrightMotor = null;
     private DcMotor backleftMotor = null;
     private DcMotor tempMotor = null;
-
+    private CRServo tempServo = null;
 
     @Override
     public void runOpMode() {
@@ -40,6 +42,7 @@ public class AlphaGamepad extends LinearOpMode {
         backleftMotor   = hardwareMap.get(DcMotor.class, "MBackLeft");
         backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
         tempMotor       = hardwareMap.get(DcMotor.class, "tempMotor");
+        tempServo       = hardwareMap.get(CRServo.class,   "SFirst");
 
         //Set default reverse for right motors to account for inverse motors
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -153,16 +156,23 @@ public class AlphaGamepad extends LinearOpMode {
             if (gamepad2.dpad_up)
             {
                 tempMotor.setPower(0.2);
+                tempServo.setPower(0.8);
+
             }
             else if (gamepad2.dpad_down)
             {
                 tempMotor.setPower(-0.2);
+                tempServo.setPower(-0.8);
             } else {
+
                 tempMotor.setPower(0);
+                tempServo.setPower(0);
+
             }
 
 
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
             telemetry.update();
         }

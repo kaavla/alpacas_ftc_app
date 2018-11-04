@@ -126,15 +126,7 @@ public class AlphaGamepad extends LinearOpMode {
                 if (motor_power > 0.2) {
                     motor_power = motor_power - 0.1;
                 }
-            } else {
-                leftMotor.setPower(0);
-                rightMotor.setPower(0);
-                backleftMotor.setPower(0);
-                backrightMotor.setPower(0);
-            }
-
-
-            if (gamepad2.dpad_up) {
+            } else if (gamepad2.dpad_up) {
                 slideMotor.setPower(-0.8);
             } else if (gamepad2.dpad_down) {
                 slideMotor.setPower(0.8);
@@ -144,23 +136,27 @@ public class AlphaGamepad extends LinearOpMode {
                 collectionMotor.setPower(-0.4);
             } else if (gamepad2.left_bumper) {
                 spinnerServo.setPower(0.8);
+            } else if (gamepad2.right_bumper) {
+                spinnerServo.setPower((-0.8));
+            }
+            else
+            {
+                slideMotor.setPower(0);
+                collectionMotor.setPower(0);
+                leftMotor.setPower(0);
+                rightMotor.setPower(0);
+                backleftMotor.setPower(0);
+                backrightMotor.setPower(0);
+                spinnerServo.setPower(0);
 
-                if (gamepad2.right_bumper) {
-                    spinnerServo.setPower((-0.8));
 
-                    {
-
-                        slideMotor.setPower(0);
-                        collectionMotor.setPower(0);
-
-                    }
+            }
 
                     telemetry.addData("Status", "Run Time: " + runtime.toString());
                     telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
                     telemetry.update();
-                }
             }
         }
-
     }
-}
+
+

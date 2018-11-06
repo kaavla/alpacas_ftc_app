@@ -92,7 +92,6 @@ public class HardwareAutonomous
         parameters.calibrationDataFile  = "BNO055IMUCalibration.json"; // see the calibration sample opmode
         parameters.loggingEnabled       = true;
         parameters.loggingTag           = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu.initialize(parameters);
 

@@ -44,9 +44,11 @@ public class AlphaGamepad extends LinearOpMode {
         tempMotor       = hardwareMap.get(DcMotor.class, "tempMotor");
         tempServo       = hardwareMap.get(CRServo.class,   "SFirst");
 
+
         //Set default reverse for right motors to account for inverse motors
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backleftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         waitForStart();
         runtime.reset();

@@ -80,8 +80,9 @@ public class AutonomousTest extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.5;
-    static final double     TURN_SPEED              = 0.2;
+    static final double     DRIVE_SPEED             = 0.8;
+    static final double     TURN_SPEED              = 0.5;
+    static final double     REFERENCE_ANGLE           = 165;
 
     Orientation lastAngles = new Orientation();
     double globalAngle, power = .30, correction;
@@ -118,17 +119,22 @@ public class AutonomousTest extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        double current_angle = getAbsoluteAngle();
+        myEncoderDrive(0, DRIVE_SPEED, 13, 5.0);
+        rotate((int)(REFERENCE_ANGLE - current_angle), TURN_SPEED);
+        myEncoderDrive(2, DRIVE_SPEED, 45, 5.0);
+        rotate(45, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 33, 5.0);
+        rotate(40, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 45, 5.0);
+        rotate(180, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 105, 5.0);
+        /*rotate(-90, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 20, 5.0);
+        rotate(90, TURN_SPEED);
+        myEncoderDrive(0, DRIVE_SPEED, 32, 5.0);
+        */
 
-        //0,2,1,3
-
-        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
-        rotate(88, TURN_SPEED);
-        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
-        rotate(88, TURN_SPEED);
-        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
-        rotate(88, TURN_SPEED);
-        myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
-        rotate(88, TURN_SPEED);
 
 /*
         myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
@@ -174,7 +180,8 @@ public class AutonomousTest extends LinearOpMode {
                 newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
-            } else if (direction == 1)
+            }
+            else if (direction == 1)
             {
                 //Go backward
                 newLeftTarget = robot.rightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
@@ -189,7 +196,6 @@ public class AutonomousTest extends LinearOpMode {
                 newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
                 newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
                 newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
-
             }
             else if (direction == 3)
             {
@@ -198,7 +204,6 @@ public class AutonomousTest extends LinearOpMode {
                 newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(-1*Inches * COUNTS_PER_INCH);
-
             }
             else
             {
@@ -207,26 +212,23 @@ public class AutonomousTest extends LinearOpMode {
                 newRightTarget = robot.leftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newLeftBackTarget = robot.backrightMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
                 newRightBackTarget = robot.backleftMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
-
             }
-
             robot.leftMotor.setTargetPosition(newLeftTarget);
             robot.rightMotor.setTargetPosition(newRightTarget);
             robot.backleftMotor.setTargetPosition(newLeftBackTarget);
             robot.backrightMotor.setTargetPosition(newRightBackTarget);
-
             // Turn On RUN_TO_POSITION
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.backleftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.backrightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
             // reset the timeout time and start motion.
             runtime.reset();
             robot.leftMotor.setPower(Math.abs(speed));
             robot.rightMotor.setPower(Math.abs(speed));
             robot.backleftMotor.setPower(Math.abs(speed));
             robot.backrightMotor.setPower(Math.abs(speed));
+
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -294,6 +296,23 @@ public class AutonomousTest extends LinearOpMode {
 
         return globalAngle;
     }
+
+    /**
+     * Get current cumulative angle rotation 0, Counterclockwise upto 360.
+     * @return Angle in degrees. 0 to 359.
+     */
+    private double getAbsoluteAngle()
+    {
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double deltaAngle = angles.firstAngle;
+
+        if (deltaAngle < 0)
+            deltaAngle = 180 + deltaAngle + 180 ;
+
+        return deltaAngle;
+    }
+
+
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right

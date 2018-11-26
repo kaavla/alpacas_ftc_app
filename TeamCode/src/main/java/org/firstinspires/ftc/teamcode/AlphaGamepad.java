@@ -30,6 +30,7 @@ public class AlphaGamepad extends LinearOpMode {
     private DcMotor MCollectionSlide = null;
     private DcMotor MCollectionLift = null;
     private DcMotor MDropLift = null;
+    private DcMotor MLanderLift = null;
     private CRServo spinnerServo = null;
     private Servo trayServo = null;
 
@@ -52,6 +53,7 @@ public class AlphaGamepad extends LinearOpMode {
         MCollectionSlide = hardwareMap.get(DcMotor.class, "MCollectionSlide");
         MCollectionLift = hardwareMap.get(DcMotor.class, "MCollectionLift");
         MDropLift = hardwareMap.get(DcMotor.class, "MDropLift");
+        MLanderLift = hardwareMap.get(DcMotor.class, "MLanderLift");
         spinnerServo = hardwareMap.crservo.get("spinnerServo");
         trayServo = hardwareMap.servo.get("trayServo");
 
@@ -121,7 +123,14 @@ public class AlphaGamepad extends LinearOpMode {
                 //left diagonal backward
                 leftMotor.setPower(-1 * motor_power);
                 backrightMotor.setPower(-1 * motor_power);
-// GAMEPAD 2 STARTS HERE
+            }
+            else if (gamepad2.left_stick_button)
+            {
+                MLanderLift.setPower(1);
+            }
+            else if (gamepad2.right_stick_button)
+            {
+                MLanderLift.setPower(-1);
             }
             else if (gamepad2.dpad_up) {
                 MCollectionSlide.setPower(-0.6);
@@ -164,6 +173,8 @@ public class AlphaGamepad extends LinearOpMode {
                 rightMotor.setPower(0);
                 backleftMotor.setPower(0);
                 backrightMotor.setPower(0);
+                MLanderLift.setPower(0);
+
             }
            /* } else if (gamepad1.a) {
                 count++;

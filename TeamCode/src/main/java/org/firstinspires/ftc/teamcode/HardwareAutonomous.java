@@ -60,7 +60,7 @@ public class HardwareAutonomous
     public DcMotor  backrightMotor     = null;
     public DcMotor  backleftMotor      = null;
     public BNO055IMU imu;
-    public DcMotor  dropLift           = null;
+    public DcMotor  landerLift           = null;
 
     // public static final double MID_SERVO       =  0.5 ;
    // public static final double ARM_UP_POWER    =  0.45 ;
@@ -85,7 +85,7 @@ public class HardwareAutonomous
         rightMotor        = hwMap.get(DcMotor.class, "MFrontRight");
         backrightMotor    = hwMap.get(DcMotor.class, "MBackRight");
         backleftMotor     = hwMap.get(DcMotor.class, "MBackLeft");
-        dropLift          = hwMap.get(DcMotor.class, "MDropLift");
+        landerLift        = hwMap.get(DcMotor.class, "MLanderLift");
 
         imu               = hwMap.get(BNO055IMU .class, "imu");
 
@@ -114,13 +114,13 @@ public class HardwareAutonomous
         rightMotor.setPower(0);
         backrightMotor.setPower(0);
         backleftMotor.setPower(0);
-        dropLift.setPower(0);
+        landerLift.setPower(0);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backrightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backleftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        dropLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        landerLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.

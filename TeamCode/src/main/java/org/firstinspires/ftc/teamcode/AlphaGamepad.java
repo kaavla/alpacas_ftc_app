@@ -1,6 +1,8 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import android.widget.Spinner;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -25,8 +27,14 @@ public class AlphaGamepad extends LinearOpMode {
     private DcMotor rightMotor = null;
     private DcMotor backrightMotor = null;
     private DcMotor backleftMotor = null;
-    private DcMotor tempMotor = null;
-    private CRServo tempServo = null;
+    private DcMotor MCollectionSlide = null;
+    private DcMotor MCollectionLift = null;
+    private DcMotor MDropLift = null;
+    private CRServo spinnerServo = null;
+    private Servo trayServo = null;
+
+
+
 
     @Override
     public void runOpMode() {
@@ -37,12 +45,16 @@ public class AlphaGamepad extends LinearOpMode {
         telemetry.update();
 
         //Initialize motor variables
-        leftMotor       = hardwareMap.get(DcMotor.class, "MFrontLeft");
-        rightMotor      = hardwareMap.get(DcMotor.class, "MFrontRight");
-        backleftMotor   = hardwareMap.get(DcMotor.class, "MBackLeft");
-        backrightMotor  = hardwareMap.get(DcMotor.class, "MBackRight");
-        tempMotor       = hardwareMap.get(DcMotor.class, "tempMotor");
-        tempServo       = hardwareMap.get(CRServo.class,   "SFirst");
+        leftMotor = hardwareMap.get(DcMotor.class, "MFrontLeft");
+        rightMotor = hardwareMap.get(DcMotor.class, "MFrontRight");
+        backleftMotor = hardwareMap.get(DcMotor.class, "MBackLeft");
+        backrightMotor = hardwareMap.get(DcMotor.class, "MBackRight");
+        MCollectionSlide = hardwareMap.get(DcMotor.class, "MCollectionSlide");
+        MCollectionLift = hardwareMap.get(DcMotor.class, "MCollectionLift");
+        MDropLift = hardwareMap.get(DcMotor.class, "MDropLift");
+        spinnerServo = hardwareMap.crservo.get("spinnerServo");
+        trayServo = hardwareMap.servo.get("trayServo");
+
 
 
         //Set default reverse for right motors to account for inverse motors
@@ -59,124 +71,128 @@ public class AlphaGamepad extends LinearOpMode {
             telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
             telemetry.update();
 
-            if (gamepad1.dpad_up)
-            {
+            if (gamepad1.dpad_up) {
                 //Go Forward
                 leftMotor.setPower(motor_power);
                 rightMotor.setPower(motor_power);
                 backleftMotor.setPower(motor_power);
                 backrightMotor.setPower(motor_power);
-            }
-            else if (gamepad1.dpad_down)
-            {
+            } else if (gamepad1.dpad_down) {
                 //Go Backward
-                leftMotor.setPower(-1*motor_power);
-                rightMotor.setPower(-1*motor_power);
-                backleftMotor.setPower(-1*motor_power);
-                backrightMotor.setPower(-1*motor_power);
-            }
-            else if (gamepad1.dpad_right)
-            {
+                leftMotor.setPower(-1 * motor_power);
+                rightMotor.setPower(-1 * motor_power);
+                backleftMotor.setPower(-1 * motor_power);
+                backrightMotor.setPower(-1 * motor_power);
+            } else if (gamepad1.dpad_right) {
                 //Rotate Right on Axis
                 leftMotor.setPower(motor_power);
-                rightMotor.setPower(-1*motor_power);
+                rightMotor.setPower(-1 * motor_power);
                 backleftMotor.setPower(motor_power);
-                backrightMotor.setPower(-1*motor_power);
-            }
-            else if (gamepad1.dpad_left)
-            {
+                backrightMotor.setPower(-1 * motor_power);
+            } else if (gamepad1.dpad_left) {
                 //Rotate Left on axis
-                leftMotor.setPower(-1*motor_power);
+                leftMotor.setPower(-1 * motor_power);
                 rightMotor.setPower(motor_power);
-                backleftMotor.setPower(-1*motor_power);
+                backleftMotor.setPower(-1 * motor_power);
                 backrightMotor.setPower(motor_power);
-            }
-            else if (gamepad1.b)
-            {
+            } else if (gamepad1.b) {
                 //Strafe Right
                 leftMotor.setPower(motor_power);
-                rightMotor.setPower(-1*motor_power);
-                backleftMotor.setPower(-1*motor_power);
+                rightMotor.setPower(-1 * motor_power);
+                backleftMotor.setPower(-1 * motor_power);
                 backrightMotor.setPower(motor_power);
-            }
-            else if (gamepad1.x)
-            {
+            } else if (gamepad1.x) {
                 //Strafe Left
-                leftMotor.setPower(-1*motor_power);
+                leftMotor.setPower(-1 * motor_power);
                 rightMotor.setPower(motor_power);
                 backleftMotor.setPower(motor_power);
-                backrightMotor.setPower(-1*motor_power);
-            }
-            else if (gamepad1.right_bumper)
-            {
+                backrightMotor.setPower(-1 * motor_power);
+            } else if (gamepad1.right_bumper) {
                 //right diagonal forward
                 leftMotor.setPower(motor_power);
                 backrightMotor.setPower(motor_power);
-            }
-            else if (gamepad1.left_bumper)
-            {
+            } else if (gamepad1.left_bumper) {
                 //forward diagonal left
                 rightMotor.setPower(motor_power);
                 backleftMotor.setPower(motor_power);
-            }
-            else if (gamepad1.right_stick_button)
-            {
+            } else if (gamepad1.right_stick_button) {
                 //right diagonal backward
-                rightMotor.setPower(-1*motor_power);
-                backleftMotor.setPower(-1*motor_power);
-            }
-            else if (gamepad1.left_stick_button)
-            {
+                rightMotor.setPower(-1 * motor_power);
+                backleftMotor.setPower(-1 * motor_power);
+            } else if (gamepad1.left_stick_button) {
                 //left diagonal backward
-                leftMotor.setPower(-1*motor_power);
-                backrightMotor.setPower(-1*motor_power);
+                leftMotor.setPower(-1 * motor_power);
+                backrightMotor.setPower(-1 * motor_power);
+// GAMEPAD 2 STARTS HERE
             }
-            else if (gamepad1.a)
-            {
-                count++;
-                //Increase Power
-                if (motor_power < 1.0) {
-                    motor_power = motor_power + 0.1;
-                }
+            else if (gamepad2.dpad_up) {
+                MCollectionSlide.setPower(-0.6);
             }
-            else if (gamepad1.y)
-            {
-                //Reduce Power
-                if (motor_power > 0.2) {
-                    motor_power = motor_power - 0.1;
-                }
+            else if (gamepad2.dpad_down) {
+                MCollectionSlide.setPower(0.6);
             }
-            else
-            {
+            else if (gamepad2.dpad_left) {
+                MCollectionLift.setPower(0.4);
+            }
+            else if (gamepad2.dpad_right) {
+                MCollectionLift.setPower(-0.4);
+            }
+            else if (gamepad2.y) {
+                MDropLift.setPower(0.6);
+            }
+            else if (gamepad2.a) {
+                MDropLift.setPower(-0.6);
+            }
+            else if (gamepad2.left_bumper) {
+                spinnerServo.setPower(0.9);
+            }
+            else if (gamepad2.right_bumper) {
+                //spinnerServo.setPower(1);
+                spinnerServo.setPower(-0.9);
+            }
+            else if (gamepad2.x) {
+                trayServo.setPosition(0.9);
+            }
+            else if (gamepad2.b) {
+                trayServo.setPosition(0);
+            }
+            else {
+                MCollectionLift.setPower(0);
+                MCollectionSlide.setPower(0);
+                MDropLift.setPower(0);
+                spinnerServo.setPower(0);
+                trayServo.setPosition(0);
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
                 backleftMotor.setPower(0);
                 backrightMotor.setPower(0);
             }
+           /* } else if (gamepad1.a) {
+                count++;
+                //Increase Power
+                if (motor_power < 1.0) {
+                    motor_power = motor_power + 0.1;
+                }
+            } else if (gamepad1.y) {
+                //Reduce Power
+               // if (motor_power > 0.2) {
+                  //  motor_power = motor_power - 0.1;
+              //  }
 
-
-            if (gamepad2.dpad_up)
-            {
-                tempMotor.setPower(0.2);
-                tempServo.setPower(0.8);
-
+                leftMotor.setPower(0);
+                rightMotor.setPower(0);
+                backleftMotor.setPower(0);
+                backrightMotor.setPower(0);
+                spinnerServo.setPower(0.5);
+                //testServo.setPower(0.0);
+            */
             }
-            else if (gamepad2.dpad_down)
-            {
-                tempMotor.setPower(-0.2);
-                tempServo.setPower(-0.8);
-            } else {
 
-                tempMotor.setPower(0);
-                tempServo.setPower(0);
-
+                    telemetry.addData("Status", "Run Time: " + runtime.toString());
+                    telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
+                    telemetry.update();
             }
-
-
-
-             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "FL(%.1f),FR(%.1f),BL(%.1f),BR(%.1f), count(%d)", motor_power, motor_power, motor_power, motor_power, count);
-            telemetry.update();
         }
-    }
-}
+
+
+

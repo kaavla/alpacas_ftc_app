@@ -127,7 +127,7 @@ public class Esha_Autonomous_Mode extends LinearOpMode {
         //0,1,2,3
 
         myLanderLift(4,TURN_SPEED,5,7.0);
-        myEncoderDrive(3, DRIVE_SPEED, 5, 5.0);
+        myEncoderDrive(3, DRIVE_SPEED, 7, 5.0);
         myEncoderDrive(0, DRIVE_SPEED, 24, 5.0);
         rotate(95, TURN_SPEED);
         myEncoderDrive(0, DRIVE_SPEED, 95, 5.0);

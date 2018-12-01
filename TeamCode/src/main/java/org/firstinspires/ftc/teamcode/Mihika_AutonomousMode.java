@@ -34,6 +34,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
         //1 rotation : 1440 Ticks.
         //1 inch = 1440*20/1.75 ticks
         static final double     TICKS_PER_INCH          = 16500;
+        //14000
 
         Orientation lastAngles = new Orientation();
         double globalAngle, power = .30, correction;
@@ -56,13 +57,13 @@ public class Mihika_AutonomousMode extends LinearOpMode {
             robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.backrightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.backleftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.dropLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.landerLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.backleftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.backrightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.dropLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.landerLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Send telemetry message to indicate successful Encoder reset;
             telemetry.addData("MotorTelemetry",  "Starting at %7d :%7d :%7d :%7d",
@@ -77,8 +78,10 @@ public class Mihika_AutonomousMode extends LinearOpMode {
 
             //0,2,1,3
             //unhook
-            myDropLift(0, TURN_SPEED, 10, 5.0);
-            myEncoderDrive(3, DRIVE_SPEED, 4, 5.0);
+            myLanderLift(0, TURN_SPEED, 5, 7.0);
+            //may need to change time to 6.5
+            //may need to change inches/distance once ticks per inch is changed
+            myEncoderDrive(3, DRIVE_SPEED, 5, 5.0);
             myEncoderDrive(0, DRIVE_SPEED, 60, 5.0);
             markerServo.setPosition(0.9);
             rotate(38, TURN_SPEED);
@@ -105,7 +108,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
             telemetry.addData("Path", "Complete");
             telemetry.update();
         }
-        private void myDropLift (double direction,
+        private void myLanderLift (double direction,
                                  double speed,
                                  double Inches,
                                  double timeoutS) {
@@ -113,7 +116,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
 
 
             //Reset the encoder
-            robot.dropLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.landerLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // Ensure that the op mode is still active
             if (opModeIsActive()) {
@@ -122,25 +125,25 @@ public class Mihika_AutonomousMode extends LinearOpMode {
                 if (direction == 0)
                 {
                     //Go down
-                    newLiftTarget = robot.dropLift.getCurrentPosition() + (int)(Inches * TICKS_PER_INCH);
+                    newLiftTarget = robot.landerLift.getCurrentPosition() + (int)(Inches * TICKS_PER_INCH);
                 } else if (direction == 1) {
                     //Go down
-                    newLiftTarget = robot.dropLift.getCurrentPosition() + (int) (-1 * Inches * TICKS_PER_INCH);
+                    newLiftTarget = robot.landerLift.getCurrentPosition() + (int) (-1 * Inches * TICKS_PER_INCH);
                 }
                 else
                 {
                     Inches = 0;
-                    newLiftTarget = robot.dropLift.getCurrentPosition() + (int)(Inches * TICKS_PER_INCH);
+                    newLiftTarget = robot.landerLift.getCurrentPosition() + (int)(Inches * TICKS_PER_INCH);
                 }
 
-                robot.leftMotor.setTargetPosition(newLiftTarget);
+                robot.landerLift.setTargetPosition(newLiftTarget);
 
                 // Turn On RUN_TO_POSITION
-                robot.dropLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.landerLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 // reset the timeout time and start motion.
                 runtime.reset();
-                robot.dropLift.setPower(Math.abs(speed));
+                robot.landerLift.setPower(Math.abs(speed));
 
                 // keep looping while we are still active, and there is time left, and both motors are running.
                 // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -150,20 +153,20 @@ public class Mihika_AutonomousMode extends LinearOpMode {
                 // onto the next step, use (isBusy() || isBusy()) in the loop test.
                 while (opModeIsActive() &&
                         (runtime.seconds() < timeoutS) &&
-                        (robot.dropLift.isBusy() )) {
+                        (robot.landerLift.isBusy() )) {
 
                     // Display it for the driver.
-                    telemetry.addData("Path1",  "Running to %7d :%7d", newLiftTarget);
-                    telemetry.addData("Path2",  "Running at %7d :%7d",
-                            robot.dropLift.getCurrentPosition());
+                    //telemetry.addData("Path1",  "Running to %7d :%7d", newLiftTarget);
+                    //telemetry.addData("Path2",  "Running at %7d :%7d",
+                    //        robot.landerLift.getCurrentPosition());
                     telemetry.update();
                 }
 
                 // Stop all motion;
-                robot.dropLift.setPower(0);
+                robot.landerLift.setPower(0);
 
                 // Turn off RUN_TO_POSITION
-                robot.dropLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.landerLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 sleep(200);   // optional pause after each move
             }

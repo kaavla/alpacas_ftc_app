@@ -105,13 +105,13 @@ public class Esha_Autonomous_Mode extends LinearOpMode {
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backrightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backleftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.LanderLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.landerLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backleftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backrightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.LanderLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.landerLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset;
         telemetry.addData("MotorTelemetry", "Starting at %7d :%7d :%7d :%7d",
@@ -357,7 +357,7 @@ public class Esha_Autonomous_Mode extends LinearOpMode {
 
 
         //Reset the encoder
-        robot.LanderLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.landerLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -365,24 +365,24 @@ public class Esha_Autonomous_Mode extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             if (direction == 4) {
                 //Go up
-                newLanderLiftTarget = robot.LanderLiftMotor.getCurrentPosition() + (int) (Inches * TICKS_PER_INCH);
+                newLanderLiftTarget = robot.landerLift.getCurrentPosition() + (int) (Inches * TICKS_PER_INCH);
             } else if (direction == 5) {
                 //Go down
-                newLanderLiftTarget = robot.LanderLiftMotor.getCurrentPosition() + (int) (Inches -1 * TICKS_PER_INCH);
+                newLanderLiftTarget = robot.landerLift.getCurrentPosition() + (int) (Inches -1 * TICKS_PER_INCH);
 
             } else {
                 Inches = 0;
-                newLanderLiftTarget = robot.LanderLiftMotor.getCurrentPosition() + (int) (Inches * TICKS_PER_INCH);
+                newLanderLiftTarget = robot.landerLift.getCurrentPosition() + (int) (Inches * TICKS_PER_INCH);
             }
 
-            robot.LanderLiftMotor.setTargetPosition(newLanderLiftTarget);
+            robot.landerLift.setTargetPosition(newLanderLiftTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.LanderLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.landerLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.LanderLiftMotor.setPower(Math.abs(speed));
+            robot.landerLift.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -392,20 +392,20 @@ public class Esha_Autonomous_Mode extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.LanderLiftMotor.isBusy())) {
+                    (robot.landerLift.isBusy())) {
 
                 // Display it for the driver.
                //telemetry.addData("Path1", "Running to %7d :%7d", newLanderLiftTarget);
                 //telemetry.addData("Path2", "Running at %7d :%7d",
-                //        robot.LanderLiftMotor.getCurrentPosition(),
+                //        robot.landerLift.getCurrentPosition(),
                 //telemetry.update());
             }
 
             // Stop all motion;
-            robot.LanderLiftMotor.setPower(0);
+            robot.landerLift.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.LanderLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.landerLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(200);   // optional pause after each move
 

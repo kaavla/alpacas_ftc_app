@@ -33,7 +33,10 @@ public class Mihika_AutonomousMode extends LinearOpMode {
         // 1.75 inch requires 20 rotations.
         //1 rotation : 1440 Ticks.
         //1 inch = 1440*20/1.75 ticks
-        static final double     TICKS_PER_INCH          = 16500;
+        static final double ROTATIONS_PER_INCH = 11.42;
+        static final double TICKS_PER_INCH = (ROTATIONS_PER_INCH * COUNTS_PER_MOTOR_REV); //may need to update Counts per motor rev because the motor may have a different amount of ticks
+
+        //static final double     TICKS_PER_INCH          = 16500;
         //14000
 
         Orientation lastAngles = new Orientation();

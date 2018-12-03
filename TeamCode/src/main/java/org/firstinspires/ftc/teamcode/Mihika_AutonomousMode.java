@@ -26,15 +26,15 @@ public class Mihika_AutonomousMode extends LinearOpMode {
         static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                 (WHEEL_DIAMETER_INCHES * 3.1415);
         static final double     DRIVE_SPEED             = 0.5;
-        static final double     TURN_SPEED              = 0.2;
+        static final double     TURN_SPEED              = 1;
         private Servo markerServo = null;
 
         //number of encoder ticks for going up and down.
         // 1.75 inch requires 20 rotations.
-        //1 rotation : 1440 Ticks.
-        //1 inch = 1440*20/1.75 ticks
+        //1 rotation : 1120 Ticks.
+        //1 inch = 1120*20/1.75 ticks
         static final double ROTATIONS_PER_INCH = 11.42;
-        static final double TICKS_PER_INCH = (ROTATIONS_PER_INCH * COUNTS_PER_MOTOR_REV); //may need to update Counts per motor rev because the motor may have a different amount of ticks
+        static final double TICKS_PER_INCH = (ROTATIONS_PER_INCH * 1120); //may need to update Counts per motor rev because the motor may have a different amount of ticks
 
         //static final double     TICKS_PER_INCH          = 16500;
         //14000
@@ -81,11 +81,12 @@ public class Mihika_AutonomousMode extends LinearOpMode {
 
             //0,2,1,3
             //unhook
-            myLanderLift(0, TURN_SPEED, 5, 7.0);
+            myLanderLift(0, 1, 6, 8.5);
+            rotate(-15, TURN_SPEED);
             //may need to change time to 6.5
             //may need to change inches/distance once ticks per inch is changed
-            myEncoderDrive(3, DRIVE_SPEED, 5, 5.0);
-            myEncoderDrive(0, DRIVE_SPEED, 60, 5.0);
+            myEncoderDrive(3, 0.3, 7, 5.0);
+            myEncoderDrive(0, DRIVE_SPEED, 50, 5.0);
             markerServo.setPosition(0.9);
             rotate(38, TURN_SPEED);
             //40
@@ -154,12 +155,14 @@ public class Mihika_AutonomousMode extends LinearOpMode {
                 // always end the motion as soon as possible.
                 // However, if you require that BOTH motors have finished their moves before the robot continues
                 // onto the next step, use (isBusy() || isBusy()) in the loop test.
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (robot.landerLift.isBusy() )) {
+                //while (opModeIsActive() &&
+                //        (runtime.seconds() < timeoutS) &&
+                 //       (robot.landerLift.isBusy() )) {
+                    while (opModeIsActive() &&
+                            (runtime.seconds() < timeoutS)) {
 
                     // Display it for the driver.
-                    //telemetry.addData("Path1",  "Running to %7d :%7d", newLiftTarget);
+                    telemetry.addData("Path1",  "Run time to %7f", runtime.seconds());
                     //telemetry.addData("Path2",  "Running at %7d :%7d",
                     //        robot.landerLift.getCurrentPosition());
                     telemetry.update();

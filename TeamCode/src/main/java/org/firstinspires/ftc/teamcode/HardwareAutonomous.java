@@ -61,6 +61,8 @@ public class HardwareAutonomous
     public DcMotor  backleftMotor      = null;
     public BNO055IMU imu;
     public DcMotor  landerLift           = null;
+    public Servo markerServo = null;
+
 
     // public static final double MID_SERVO       =  0.5 ;
    // public static final double ARM_UP_POWER    =  0.45 ;
@@ -86,7 +88,7 @@ public class HardwareAutonomous
         backrightMotor    = hwMap.get(DcMotor.class, "MBackRight");
         backleftMotor     = hwMap.get(DcMotor.class, "MBackLeft");
         landerLift        = hwMap.get(DcMotor.class, "MLanderLift");
-
+        markerServo       =hwMap.get(Servo.class, "markerServo");
         imu               = hwMap.get(BNO055IMU .class, "imu");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -115,6 +117,7 @@ public class HardwareAutonomous
         backrightMotor.setPower(0);
         backleftMotor.setPower(0);
         landerLift.setPower(0);
+        markerServo.setPosition(0);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

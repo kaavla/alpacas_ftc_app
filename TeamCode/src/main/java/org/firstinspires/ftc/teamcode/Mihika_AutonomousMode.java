@@ -37,7 +37,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
         static final double TICKS_PER_INCH = (ROTATIONS_PER_INCH * 1120); //may need to update Counts per motor rev because the motor may have a different amount of ticks
 
         //static final double     TICKS_PER_INCH          = 16500;
-        //14000
+        //14000 - may be the right one - might need to try to check ---for above
 
         Orientation lastAngles = new Orientation();
         double globalAngle, power = .30, correction;
@@ -81,12 +81,12 @@ public class Mihika_AutonomousMode extends LinearOpMode {
 
             //0,2,1,3
             //unhook
-            myLanderLift(0, 1, 6, 8.5);
-            rotate(-15, TURN_SPEED);
+            myLanderLift(0, 1, 6, 7.25);
+            //rotate(-7, TURN_SPEED);
             //may need to change time to 6.5
             //may need to change inches/distance once ticks per inch is changed
-            myEncoderDrive(3, 0.3, 7, 5.0);
-            myEncoderDrive(0, DRIVE_SPEED, 50, 5.0);
+            myEncoderDrive(2, 0.3, 5, 5.0);
+            myEncoderDrive(0, DRIVE_SPEED, 60, 5.0);
             markerServo.setPosition(0.9);
             rotate(38, TURN_SPEED);
             //40
@@ -97,7 +97,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
             //park in crater
 
 /*
-        myEncoderDrive(0, DRIVE_SPEE  D, 24, 24,5.0);
+        myEncoderDrive(0, DRIVE_SPEED  D, 24, 24,5.0);
         myEncoderDrive(2, DRIVE_SPEED, 24, -24,5.0);
         myEncoderDrive(0, DRIVE_SPEED, 24, 24,5.0);
         myEncoderDrive(2, DRIVE_SPEED, 24, -24,5.0);

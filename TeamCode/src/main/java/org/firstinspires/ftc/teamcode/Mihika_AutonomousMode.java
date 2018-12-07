@@ -85,7 +85,7 @@ public class Mihika_AutonomousMode extends LinearOpMode {
             //rotate(-7, TURN_SPEED);
             //may need to change time to 6.5
             //may need to change inches/distance once ticks per inch is changed
-            myEncoderDrive(2, 0.3, 5, 5.0);
+            myEncoderDrive(3, 0.3, 5, 5.0);
             myEncoderDrive(0, DRIVE_SPEED, 60, 5.0);
             markerServo.setPosition(0.9);
             rotate(38, TURN_SPEED);
